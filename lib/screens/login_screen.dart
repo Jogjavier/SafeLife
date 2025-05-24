@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safelife/screens/paramedico_screen.dart';
 import 'paciente_screen.dart';
+import 'bienvenida_screen.dart';
+import 'bienpara_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,7 +30,9 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const PacienteScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const BienvenidaScreen(),
+                    ),
                   );
                 },
                 child: const Row(
@@ -45,7 +49,9 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ParamedicoScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const BienvparaScreen(),
+                    ),
                   );
                 },
                 child: const Row(

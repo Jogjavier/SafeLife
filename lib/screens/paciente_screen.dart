@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'bienvenida_screen.dart';
 
-class PacienteScreen extends StatelessWidget {
+class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
+
+  @override
+  State<PacienteScreen> createState() => _PacienteScreenState();
+}
+
+class _PacienteScreenState extends State<PacienteScreen> {
+  final TextEditingController _nombreController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nombreController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +29,17 @@ class PacienteScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildInputField('Nombre'),
+            _buildInputField('Nombre', _nombreController),
             _buildInputField('Edad'),
             _buildInputField('Sexo'),
             _buildInputField('Tipo de sangre'),
             _buildInputField('Alergias'),
             _buildInputField('Número de emergencia'),
             _buildInputField('Doctor personal'),
-            const SizedBox(height: 16),
-
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                // Guardar historial médico
+
               },
               child: const Text('Ingresar historial médico'),
             ),
@@ -44,10 +56,11 @@ class PacienteScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(String label) {
+  Widget _buildInputField(String label, [TextEditingController? controller]) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(color: Color(0xFF4A4A4A)),
@@ -62,3 +75,4 @@ class PacienteScreen extends StatelessWidget {
     );
   }
 }
+
