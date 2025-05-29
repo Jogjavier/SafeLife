@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'chat_screen.dart';
 
-class MensajeriaScreen extends StatefulWidget {
-  const MensajeriaScreen({super.key});
+class PacimensScreen extends StatefulWidget {
+  const PacimensScreen({super.key});
 
   @override
-  State<MensajeriaScreen> createState() => _MensajeriaScreenState();
+  State<PacimensScreen> createState() => _PacimensScreenState();
 }
 
-class _MensajeriaScreenState extends State<MensajeriaScreen> {
+class _PacimensScreenState extends State<PacimensScreen> {
   List<String> pacientes = [
     'Juan Pérez',
     'Ana García',
     'Carlos López',
     'María Torres',
     'Dr. Mario Martinez',
-    'Dr. Javier Ortiz'
+    'Dr. Javier Ortiz',
   ];
 
   String _busqueda = '';
-
-  void _eliminarPaciente(String nombre) {
-    setState(() {
-      pacientes.remove(nombre);
-    });
-  }
 
   void _abrirChat(String nombre) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ChatScreen(pacienteNombre: nombre)),
     );
+  }
+
+  void _eliminarPaciente(String nombre) {
+    setState(() {
+      pacientes.remove(nombre);
+    });
   }
 
   void _agregarPaciente() {
@@ -46,7 +46,9 @@ class _MensajeriaScreenState extends State<MensajeriaScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text("Cancelar"),
           ),
           ElevatedButton(
@@ -73,7 +75,7 @@ class _MensajeriaScreenState extends State<MensajeriaScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mensajería'),
+        title: const Text('Contactos'),
         backgroundColor: const Color(0xFF94B4B4),
         actions: [
           IconButton(
@@ -107,8 +109,8 @@ class _MensajeriaScreenState extends State<MensajeriaScreen> {
                 itemBuilder: (context, index) {
                   final paciente = pacientesFiltrados[index];
                   return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE1EAEA),
                       borderRadius: BorderRadius.circular(12),
@@ -158,5 +160,3 @@ class _MensajeriaScreenState extends State<MensajeriaScreen> {
     );
   }
 }
-
-

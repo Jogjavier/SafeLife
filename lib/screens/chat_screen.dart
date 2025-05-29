@@ -11,16 +11,45 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _mensajeController = TextEditingController();
-  final List<String> _mensajes = [];
+
+  // Simulación de mensajes entre médico y paciente
+  List<Map<String, String>> mensajes = [
+    {'remitente': 'paciente', 'texto': 'Hola doctor, tengo una duda sobre mi tratamiento.'},
+    {'remitente': 'medico', 'texto': '¡Hola! Claro, dime qué duda tienes.'},
+    {'remitente': 'paciente', 'texto': '¿Puedo tomar el medicamento con el estómago vacío?'},
+    {'remitente': 'medico', 'texto': 'Preferiblemente después de comer. Gracias por preguntar.'},
+  ];
 
   void _enviarMensaje() {
     final texto = _mensajeController.text.trim();
-    if (texto.isNotEmpty) {
-      setState(() {
-        _mensajes.insert(0, texto);
-      });
+    if (texto.isEmpty) return;
+
+    setState(() {
+      mensajes.add({'remitente': 'medico', 'texto': texto});
       _mensajeController.clear();
-    }
+    });
+  }
+
+  Widget _mensajeBurbuja(String texto, bool esMedico) {
+    return Align(
+      alignment: esMedico ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        constraints: const BoxConstraints(maxWidth: 250),
+        decoration: BoxDecoration(
+          color: esMedico ? const Color(0xFF94B4B4) : Colors.grey[300],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          texto,
+          style: TextStyle(
+            color: esMedico ? Colors.white : Colors.black,
+            fontSize: 15,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -34,30 +63,18 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              reverse: true,
               padding: const EdgeInsets.all(16),
-              itemCount: _mensajes.length,
+              itemCount: mensajes.length,
               itemBuilder: (context, index) {
-                return Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF94B4B4),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      _mensajes[index],
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                );
+                final mensaje = mensajes[index];
+                final esMedico = mensaje['remitente'] == 'medico';
+                return _mensajeBurbuja(mensaje['texto']!, esMedico);
               },
             ),
           ),
+          const Divider(height: 1),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
                 Expanded(
@@ -69,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(Icons.send, color: Color(0xFF94B4B4)),
                   onPressed: _enviarMensaje,
@@ -81,3 +99,4 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+

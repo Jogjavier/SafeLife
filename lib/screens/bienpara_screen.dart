@@ -3,6 +3,7 @@ import 'paramedico_screen.dart';
 import 'perfilpar_screen.dart';
 import 'chat_screen.dart';
 import 'mensajeria_screen.dart';
+import 'historial_screen.dart';
 
 class BienvparaScreen extends StatefulWidget {
   const BienvparaScreen({super.key});
@@ -13,14 +14,16 @@ class BienvparaScreen extends StatefulWidget {
 
 class _BienvparaScreenState extends State<BienvparaScreen> {
   String mensaje = '';
+  bool _tieneMensajesNuevos = true;
 
   void _verHistorial() {
     setState(() {
       mensaje = 'Mostrando historial médico';
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('¡Bienvenido al historial médico!')),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const HistorialMedicoScreen()),
     );
   }
 
@@ -48,14 +51,30 @@ class _BienvparaScreenState extends State<BienvparaScreen> {
                   ),
                   Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.message, color: Colors.white),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                              MaterialPageRoute(builder: (context) => const MensajeriaScreen()),
-                          );
-                        },
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.message, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                _tieneMensajesNuevos = false; // ocultar notificación
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const MensajeriaScreen()),
+                              );
+                            },
+                          ),
+                          if (_tieneMensajesNuevos)
+                            const Positioned(
+                              right: 8,
+                              top: 8,
+                              child: CircleAvatar(
+                                radius: 6,
+                                backgroundColor: Colors.red,
+                              ),
+                            ),
+                        ],
                       ),
                       PopupMenuButton<String>(
                         icon: const Icon(Icons.settings, color: Colors.white),
@@ -63,9 +82,7 @@ class _BienvparaScreenState extends State<BienvparaScreen> {
                           if (value == 'perfil') {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const PerfilParScreen(),
-                              ),
+                              MaterialPageRoute(builder: (context) => const PerfilParScreen()),
                             );
                           }
                         },
@@ -141,7 +158,12 @@ class _BienvparaScreenState extends State<BienvparaScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              onPressed: _verHistorial,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HistorialMedicoScreen()),
+                );
+              },
               child: const Text(
                 'Ver historial médico',
                 style: TextStyle(fontSize: 16),

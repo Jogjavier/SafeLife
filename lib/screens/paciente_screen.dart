@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bienvenida_screen.dart';
+import 'aghistorial_screen.dart';
+import 'formapago_screen.dart';
 
 class PacienteScreen extends StatefulWidget {
   const PacienteScreen({super.key});
@@ -36,19 +38,44 @@ class _PacienteScreenState extends State<PacienteScreen> {
             _buildInputField('Alergias'),
             _buildInputField('Número de emergencia'),
             _buildInputField('Doctor personal'),
-            const SizedBox(height: 24),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF94B4B4),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AgregarHistorialScreen()),
+                );
               },
-              child: const Text('Ingresar historial médico'),
+              child: const Text(
+                'Ingresar historial medico',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF94B4B4),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
               onPressed: () {
-                // Acción forma de pago
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FormaPagoScreen()),
+                );
               },
-              child: const Text('Forma de pago'),
+              child: const Text(
+                'Forma de pago',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),

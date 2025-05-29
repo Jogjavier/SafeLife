@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'paciente_screen.dart';
 import 'perfil_screen.dart';
+import 'pacimens_screen.dart';
+import 'politica_screen.dart';
+import 'historial_screen.dart';
+import 'exportpdf_screen.dart';// Asegúrate que esté al inicio
+import 'historial_screen.dart';
+
+
 
 
 class BienvenidaScreen extends StatefulWidget {
@@ -12,18 +19,17 @@ class BienvenidaScreen extends StatefulWidget {
 
 class _BienvenidaScreenState extends State<BienvenidaScreen> {
   String mensaje = '';
+  bool _tieneMensajesNuevos = true;
 
   void _verHistorial() {
     setState(() {
       mensaje = 'Mostrando historial médico';
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('¡Bienvenido al historial médico!')),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const HistorialMedicoScreen()),
     );
-
-    // Aquí podrías navegar a la pantalla del historial si ya la tienes creada
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => HistorialScreen()));
   }
 
   @override
@@ -33,53 +39,84 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Encabezado con menú
-        Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        color: const Color(0xFF94B4B4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'SafeLife',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+            // ENCABEZADO
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              color: const Color(0xFF94B4B4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'SafeLife',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.message, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                _tieneMensajesNuevos = false;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PacimensScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          if (_tieneMensajesNuevos)
+                            const Positioned(
+                              right: 8,
+                              top: 8,
+                              child: CircleAvatar(
+                                radius: 6,
+                                backgroundColor: Colors.red,
+                              ),
+                            ),
+                        ],
+                      ),
+                      PopupMenuButton<String>(
+                        icon: const Icon(Icons.settings, color: Colors.white),
+                        onSelected: (value) {
+                          if (value == 'perfil') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const PerfilScreen()),
+                            );
+                          } else if (value == 'politica') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const PoliticaUsoScreen()),
+                            );
+                          } else if (value == 'exportar') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const ExportarPdfScreen()),
+                            );
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(value: 'perfil', child: Text('Perfil')),
+                          const PopupMenuItem(value: 'politica', child: Text('Política de uso')),
+                          const PopupMenuItem(value: 'exportar', child: Text('Exportar a PDF')),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.message, color: Colors.white),
-                  onPressed: () {
-                    // Aquí podrías navegar a la pantalla de mensajes
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Abrir mensajes')),
-                    );
-                  },
-                ),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                  onSelected: (value) {
-                    if (value == 'perfil') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PerfilScreen(),
-                        ),
-                      );
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'perfil', child: Text('Perfil')),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+
+            const SizedBox(height: 20),
+
             const Text(
               '¡Bienvenida!',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -91,12 +128,12 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
 
             const SizedBox(height: 20),
 
-            // Logo
-            Image.asset('assets/safelife_logo.jpg', height: 160),
+            // LOGO
+            Image.asset('assets/safelife_logo.jpg', height: 140),
 
             const SizedBox(height: 30),
 
-            // Contenedor con huella (solo decorativo)
+            // HUELLA ICONO
             GestureDetector(
               onTap: _verHistorial,
               child: Container(
@@ -118,6 +155,7 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
 
             const SizedBox(height: 30),
 
+            // BOTÓN INGRESAR DATOS
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF94B4B4),
@@ -129,7 +167,7 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PacienteScreen()),
+                  MaterialPageRoute(builder: (_) => const PacienteScreen()),
                 );
               },
               child: const Text(
@@ -137,7 +175,10 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
+
             const SizedBox(height: 30),
+
+            // BOTÓN VER HISTORIAL
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF94B4B4),
@@ -146,7 +187,12 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              onPressed: _verHistorial,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HistorialMedicoScreen()),
+                );
+              },
               child: const Text(
                 'Ver historial médico',
                 style: TextStyle(fontSize: 16),
@@ -155,7 +201,7 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
 
             const SizedBox(height: 20),
 
-            // Mensaje de estado
+            // MENSAJE ESTADO
             Text(
               mensaje,
               style: TextStyle(
@@ -169,5 +215,6 @@ class _BienvenidaScreenState extends State<BienvenidaScreen> {
     );
   }
 }
+
 
 
